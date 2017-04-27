@@ -152,9 +152,9 @@ else:
 try:
 	select = Select(driver.find_element_by_xpath(prichina_otkaza))
 	select.select_by_visible_text('Тестовые заявки')
-	print 'ok'
+	print 'Выбран тип: Тестовые заявки - ok'
 except:
-	print 'no'
+	print 'Выбран тип: Тестовые заявки - no'
 	driver.quit()
 
 try:
