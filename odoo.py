@@ -107,7 +107,7 @@ time.sleep(10)
 numb = '.oe_form_pager_state'
 num_b = driver.find_element_by_css_selector(numb)
 amount = num_b.text
-amount_first = re.search(r'^\d', amount)
+amount_first = re.search(r'^\d+', amount)
 begin = int(amount_first.group(0))
 # print(begin)
 amount_last = re.search(r'[\d]+$', amount)
@@ -120,7 +120,7 @@ while begin < end:
 
 	num_b = driver.find_element_by_css_selector(numb)
 	amount = num_b.text
-	amount_first = re.search(r'^\d', amount)
+	amount_first = re.search(r'^\d+', amount)
 	begin = int(amount_first.group(0))
 	print(u"Программа на странице №: {} из {} страниц".format(begin, end))
 
@@ -205,29 +205,9 @@ while begin < end:
 	if begin == end:
 		print u"Очистка закончена успешно!"
 		break
-	print (begin < end)
-	print type(begin)
-	print type(end)	
+
 	if begin < end:
 		driver.find_element_by_xpath(arrow).click()
 		print(u'Стрелка нажата                                     ОК')
 
 	time.sleep(10)
-
-
-
-
-
-
-
-
-# list_group = 'oe_list_group_name'
-# gt = driver.find_elements_by_class_name(list_group)
-# for el in gt:
-# 	el_text = el.text
-# 	result = re.search(u'Стажер', el_text)
-# 	if result:
-# 		# stajer_value = result.group(0)
-# 		# print(u"Произведен вход в: " + stajer_value)
-# 		print(u"Произведен вход в стажер")
-# 		el.click()
