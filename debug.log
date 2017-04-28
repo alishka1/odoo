@@ -1,6 +1,0 @@
-[0427/074947.170:ERROR:process_reader_win.cc(114)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены.  (0xc0000022)
-[0427/074947.170:ERROR:exception_snapshot_win.cc(87)] thread ID 4572 not found in process
-[0427/074947.170:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::Initialize failed
-[0427/074947.217:ERROR:process_reader_win.cc(114)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены.  (0xc0000022)
-[0427/074947.217:ERROR:exception_snapshot_win.cc(87)] thread ID 1696 not found in process
-[0427/074947.217:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::Initialize failed
