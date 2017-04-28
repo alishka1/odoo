@@ -24,14 +24,13 @@ novie = "html/body/div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[2]/div/ta
 stajer = "html/body/div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[2]/div/table/tbody[2]/tr[3]/th"
 empty_block = "html/body/div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[2]/div/table/tbody[3]/tr[1]/td[1]"
 char_content = 'oe_form_char_content'
-# То есть содержание заголовка где указана тема
 text_content = "oe_form_text_content"
-# То есть где указано: телефон, почта, тема итд
 button_edit = '.oe_button.oe_form_button_edit'
 prichina_otkaza = "html/body/div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[3]/div/div[4]/div/div/table[5]/tbody/tr[1]/td[2]/table/tbody/tr/td[2]/span/select"
 button_save = '.oe_button.oe_form_button_save.oe_highlight'
 button_musor = "html/body/div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[3]/div/div[4]/div/div/header/ul/li[4]/span[1]"
 arrow = 'html/body/div[2]/table/tbody/tr/td[2]/div/div/table/tbody/tr[2]/td[3]/div/div[2]/ul/li[2]/a'
+
 try:	
 	send = driver.find_element_by_id(login)
 	send.send_keys("admin")
@@ -80,7 +79,6 @@ except:
 	driver.quit()
 
 time.sleep(2)
-
 list_group = 'oe_list_group_name'
 gt = driver.find_elements_by_class_name(list_group)
 tranee_el = None
@@ -97,31 +95,6 @@ else:
 	print(u"Стажер не найден                                   Закрываю браузер!")
 	driver.quit()
 
-
-
-
-
-# _________________________________________________
-# list_group = 'oe_list_group_name'
-# gt = driver.find_elements_by_class_name(list_group)
-# for el in gt:
-# 	el_text = el.text
-# 	result = re.search(u'Стажер', el_text)
-# 	if result:
-# 		# stajer_value = result.group(0)
-# 		# print(u"Произведен вход в: " + stajer_value)
-# 		print(u"Произведен вход в стажер")
-# 		el.click()
-# ____________________________________________
-# ________	
-# try:
-# 	driver.find_element_by_xpath(stajer).click()
-# 	print(u'Leads     ОК')
-# except:
-# 	print(u'Leads     ОШИБКА')
-# 	driver.quit()
-# ___________
-
 time.sleep(2)
 try:
 	driver.find_element_by_xpath(empty_block).click()
@@ -135,10 +108,10 @@ numb = '.oe_form_pager_state'
 num_b = driver.find_element_by_css_selector(numb)
 amount = num_b.text
 amount_first = re.search(r'^\d', amount)
-begin = amount_first.group(0)
+begin = int(amount_first.group(0))
 # print(begin)
 amount_last = re.search(r'[\d]+$', amount)
-end = amount_last.group(0)
+end = int(amount_last.group(0))
 # print(end)
 
 while begin < end:
@@ -148,22 +121,26 @@ while begin < end:
 	num_b = driver.find_element_by_css_selector(numb)
 	amount = num_b.text
 	amount_first = re.search(r'^\d', amount)
-	begin = amount_first.group(0)
-	print(u"Программа на странице №: " + begin + u" из " + end + u" страниц.")
+	begin = int(amount_first.group(0))
+	print(u"Программа на странице №: {} из {} страниц".format(begin, end))
 
 	element = driver.find_element_by_class_name(char_content)
 	html = element.get_attribute("outerHTML")
 	soup = BeautifulSoup(html, "html.parser")
 	desired_text1 = soup.find("span", class_= char_content).next
 	# print(desired_text1)
-	if (desired_text1 == u'test' or desired_text1 == u'Test'):
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест'):
 		print u"Тема работы: " + desired_text1 + u"                                  ОК"
 	else:
 		print u"Тема работы не соответсвует                        Пропускаем!"
-		driver.find_element_by_xpath(arrow).click()
-		print(u'Стрелка нажата                                     ОК')
+		if begin == end:
+			print u"Очистка закончена успешно!"
+			break
+		if begin < end:
+			driver.find_element_by_xpath(arrow).click()
+			print(u'Стрелка нажата                                     ОК')
+			time.sleep(10)
 		continue
-	# доработать брейк
 
 	time.sleep(10)
 	element1 = driver.find_element_by_class_name(text_content)
@@ -185,15 +162,17 @@ while begin < end:
 		print(u"Почтовый ящик: " + result3.group(0))
 
 	time.sleep(2)	
-	if (desired_text1 == u'test' or desired_text1 == u'Test') and result1 and (result2 or result3):
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест') and result1 and (result2 or result3):
 		print u'Параметры соответствуют для удаления               ОК'
 		driver.find_element_by_css_selector(button_edit).click()
 	else:
-		print u'Параметры не соответствуют для удаления -  ПРОПУСКАЕМ'
+		print u'Параметры не соответствуют для удаления            Пропускаем!'
+		if begin == end:
+			print u"Очистка закончена успешно!"
+			break
 		if begin < end:
 			driver.find_element_by_xpath(arrow).click()
-			print(u'Стрелка нажата                                 ОК')
-			break
+			print(u'Стрелка нажата                                     ОК')
 		continue 
 
 
@@ -223,19 +202,32 @@ while begin < end:
 		driver.quit()
 
 	time.sleep(15)
-
+	if begin == end:
+		print u"Очистка закончена успешно!"
+		break
+	print (begin < end)
+	print type(begin)
+	print type(end)	
 	if begin < end:
 		driver.find_element_by_xpath(arrow).click()
 		print(u'Стрелка нажата                                     ОК')
-		break
-	continue
-
-	# try:
-	# 	driver.find_element_by_xpath(arrow).click()
-	# 	print(u'Стрелка нажата                                     ОК')
-	# except:
-	# 	print(u'Стрелка не нажата                                     ОШИБКА')
-	# 	driver.quit()
 
 	time.sleep(10)
-# if desired_text1 == u'test' and result1.group(0) == '77777777777' and (result2.group(0) == 'test@test.ru' or result3.group(0) == 'test@diplomtime.ru'):
+
+
+
+
+
+
+
+
+# list_group = 'oe_list_group_name'
+# gt = driver.find_elements_by_class_name(list_group)
+# for el in gt:
+# 	el_text = el.text
+# 	result = re.search(u'Стажер', el_text)
+# 	if result:
+# 		# stajer_value = result.group(0)
+# 		# print(u"Произведен вход в: " + stajer_value)
+# 		print(u"Произведен вход в стажер")
+# 		el.click()
