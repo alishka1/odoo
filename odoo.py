@@ -12,7 +12,7 @@ import re
 driver = webdriver.Chrome("chromedriver")
 driver.set_page_load_timeout(30)
 driver.get("http://192.168.0.45:8069/web/login?redirect=http%3A%2F%2F192.168.0.45%3A8069%2Fweb%3F")
-driver.implicitly_wait(10)
+driver.implicitly_wait(30)
 driver.maximize_window()
 
 login = 'login'
@@ -122,15 +122,15 @@ while begin < end:
 	amount = num_b.text
 	amount_first = re.search(r'^\d+', amount)
 	begin = int(amount_first.group(0))
-	print(u"Программа на странице №: {} из {} страниц".format(begin, end))
+	print(u"\nПрограмма на странице №: {} из {} страниц".format(begin, end))
 
 	element = driver.find_element_by_class_name(char_content)
 	html = element.get_attribute("outerHTML")
 	soup = BeautifulSoup(html, "html.parser")
 	desired_text1 = soup.find("span", class_= char_content).next
 	# print(desired_text1)
-	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест'):
-		print u"Тема работы: " + desired_text1 + u"                                  ОК"
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test'):
+		print u"Тема работы: " + desired_text1
 	else:
 		print u"Тема работы не соответсвует                        Пропускаем!"
 		if begin == end:
@@ -148,21 +148,37 @@ while begin < end:
 	soup = BeautifulSoup(html, "html.parser")
 	desired_text = soup.find("span", class_= text_content).next
 	# print(desired_text)
-	result1 = re.search(r'7{11}', desired_text)
-	if result1:
-		print(u"Номер телефона: " + result1.group(0))
+	result_phone = re.search(r'7{11}', desired_text)
+	if result_phone:
+		print(u"Номер телефона: " + result_phone.group(0))
 
-	result2 = re.search(r'test\@test\.ru', desired_text)
-	if result2:
-		print(u"Почтовый ящик: " + result2.group(0))
+	result_phone_1 = re.search(r'\+7\(7{3}\)7{3}-7{2}-7{2}', desired_text)
+	if result_phone_1:
+		print(u"Номер телефона: " + result_phone_1.group(0))
+
+	result_phone_2 = re.search(r'79053316591', desired_text)
+	if result_phone_2:
+		print(u"Номер телефона: " + result_phone_2.group(0))
+
+	result_phone_3 = re.search(r'79178438859', desired_text)
+	if result_phone_3:
+		print(u"Номер телефона: " + result_phone_3.group(0))
+
+	result_email = re.search(r'test\@test\.ru', desired_text)
+	if result_email:
+		print(u"Почтовый ящик: " + result_email.group(0))
 	# Если result2 true, то только тогда принт. Если не поставить это условие, то когда result2 равен none возникает ошибка NoneType object has no attribute group
 
-	result3 = re.search(r'test\@diplomtime\.ru', desired_text)
-	if result3:
-		print(u"Почтовый ящик: " + result3.group(0))
+	result_email_1 = re.search(r'test\@diplomtime\.ru', desired_text)
+	if result_email_1:
+		print(u"Почтовый ящик: " + result_email_1.group(0))
+
+	result_email_2 = re.search(r'nukassel\@xakep\.ru', desired_text)
+	if result_email_2:
+		print(u"Почтовый ящик: " + result_email_2.group(0))
 
 	time.sleep(2)	
-	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест') and result1 and (result2 or result3):
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test') and (result_phone or result_phone_1 or result_phone_2 or result_phone_3) and (result_email or result_email_1 or result_email_2):
 		print u'Параметры соответствуют для удаления               ОК'
 		driver.find_element_by_css_selector(button_edit).click()
 	else:
@@ -201,7 +217,7 @@ while begin < end:
 		print u'Перемещено в мусор                                 ОШИБКА'
 		driver.quit()
 
-	time.sleep(15)
+	time.sleep(20)
 	if begin == end:
 		print u"Очистка закончена успешно!"
 		break
