@@ -94,6 +94,7 @@ if tranee_el:
 else:
 	print(u"Стажер не найден                                   Закрываю браузер!")
 	driver.quit()
+	raise SystemExit(0)
 
 time.sleep(2)
 try:
@@ -129,16 +130,19 @@ while begin < end:
 	soup = BeautifulSoup(html, "html.parser")
 	desired_text1 = soup.find("span", class_= char_content).next
 	# print(desired_text1)
-	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test'):
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test' or desired_text1 == u'неизвестно'):
 		print u"Тема работы: " + desired_text1
 	else:
 		print u"Тема работы не соответсвует                        Пропускаем!"
+		time.sleep(2)
 		if begin == end:
 			print u"Очистка закончена успешно!"
 			break
 		if begin < end:
 			driver.find_element_by_xpath(arrow).click()
 			print(u'Стрелка нажата                                     ОК')
+			if begin == 1:
+				time.sleep(15)
 			time.sleep(10)
 		continue
 
@@ -178,7 +182,7 @@ while begin < end:
 		print(u"Почтовый ящик: " + result_email_2.group(0))
 
 	time.sleep(2)	
-	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test') and (result_phone or result_phone_1 or result_phone_2 or result_phone_3) and (result_email or result_email_1 or result_email_2):
+	if (desired_text1 == u'test' or desired_text1 == u'Test' or desired_text1 == u'Тест' or desired_text1 == u'тест' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-test' or desired_text1 == u'-ПОТЕРЯННАЯ ЗАЯВКА-Test' or desired_text1 == u'неизвестно') and (result_phone or result_phone_1 or result_phone_2 or result_phone_3) and (result_email or result_email_1 or result_email_2):
 		print u'Параметры соответствуют для удаления               ОК'
 		driver.find_element_by_css_selector(button_edit).click()
 	else:
@@ -209,7 +213,7 @@ while begin < end:
 		print u'Кнопка сохранить                                   ОШИБКА'
 		driver.quit()
 
-	time.sleep(2)	
+	time.sleep(15)	
 	try:
 		driver.find_element_by_xpath(button_musor).click()							
 		print u'Перемещено в мусор                                 ОК'
